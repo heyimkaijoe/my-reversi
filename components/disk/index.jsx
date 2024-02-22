@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import '../../src/App.css'
 
 const Disk = () => {
@@ -10,9 +10,9 @@ const Disk = () => {
     return (
         <button
             onClick={handleClick}
-            className={ toggle ? 'black-disk' : 'white-disk'}
+            className={`block size-8 rounded-full ${ toggle ? 'black-disk' : 'white-disk' }`}
         >
-            X
+            O
         </button>
     )
 }
