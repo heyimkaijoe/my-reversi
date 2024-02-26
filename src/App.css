@@ -5,10 +5,10 @@
   text-align: center;
 }
 
-.black-disk {
+.dark-disk {
   @apply bg-black text-white;
 }
 
-.white-disk {
+.light-disk {
   @apply bg-white text-black;
 }
