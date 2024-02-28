@@ -1,20 +1,12 @@
-import { useState } from 'react';
-import '../../src/App.css';
+export default function Disk({ isDarkDisk }) {
+    let value;
+    if (isDarkDisk) {
+        value = "T";
+    } else if (isDarkDisk === false) {
+        value = "F";
+    } else {
+        value = "X";
+    };
 
-const Disk = () => {
-  const [toggle, setToggle] = useState(false);
-  const handleClick = () => {
-    setToggle(!toggle)
-  };
-
-  return (
-    <button
-      onClick={handleClick}
-      className={`block size-8 rounded-full ${ toggle ? 'dark-disk' : 'light-disk' }`}
-    >
-      O
-    </button>
-  );
+    return <div>{value}</div>
 }
-
-export default Disk;

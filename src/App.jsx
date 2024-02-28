@@ -1,22 +1,13 @@
 import './App.css';
-import Disk from '../components/disk';
+import Game from '../components/Game';
 
-function App() {
+export default function App() {
   return (
-    <>
-      <div className='w-24 grid grid-cols-3'>
-        <Disk/>
-        <Disk/>
-        <Disk/>
-        <Disk/>
-        <Disk/>
-        <Disk/>
-        <Disk/>
-        <Disk/>
-        <Disk/>
-      </div>
-    </>
+    <Game />
   );
 }
-
-export default App;
+// Game: 1(+ status + reset btn + back/next btns)
+    //  Board: 1
+    //   Disk: 64(8x8)
+    // 
+    // States needed: history, currentMove
