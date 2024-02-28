@@ -6,9 +6,18 @@ export default function Game() {
     const [history, setHistory] = useState([initialBoard]);
     const [currentMove, setCurrentMove] = useState(0);
     const darkIsNext = currentMove % 2 === 0;
-    const currentHistory = history[history.length - 1];
+    const currentDisks = history[currentMove];
+    const handlePlay = (num) => {
+        if (currentDisks[num] !== null) return;
+        const nextDisks = currentDisks.slice();
+        nextDisks[num] = darkIsNext;
+        const nextHistory = [...history.slice(), nextDisks];
+
+        setHistory(nextHistory);
+        setCurrentMove(currentMove + 1);
+    };
 
     return (
-        <Board currentHistory={currentHistory}/>
+        <Board currentDisks={currentDisks} darkIsNext={darkIsNext} handlePlay={handlePlay}/>
     );
 }

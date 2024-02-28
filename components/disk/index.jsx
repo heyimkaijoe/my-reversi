@@ -1,12 +1,11 @@
-export default function Disk({ isDarkDisk }) {
-    let value;
+export default function Disk({ row, col, isDarkDisk, onPlay }) {
+    let value = "";
     if (isDarkDisk) {
-        value = "T";
+        value = "D";
     } else if (isDarkDisk === false) {
-        value = "F";
-    } else {
-        value = "X";
+        value = "L";
     };
+    const num = row * 8 + col;
 
-    return <div>{value}</div>
+    return <button className="size-12 p-2 border" onClick={() => onPlay(num)}>{value}</button>;
 }
