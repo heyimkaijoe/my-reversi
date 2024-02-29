@@ -1,5 +1,6 @@
 export default function Disk({ row, col, isDarkDisk, onPlay }) {
-    let value = "";
+    // TODO: turn value into dark/light disk(circle)
+    let value;
     if (isDarkDisk) {
         value = "D";
     } else if (isDarkDisk === false) {
