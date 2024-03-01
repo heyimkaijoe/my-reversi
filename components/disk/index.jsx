@@ -1,12 +1,15 @@
 export default function Disk({ row, col, isDarkDisk, onPlay }) {
-    // TODO: turn value into dark/light disk(circle)
-    let value;
-    if (isDarkDisk) {
-        value = "D";
-    } else if (isDarkDisk === false) {
-        value = "L";
-    };
     const num = row * 8 + col;
+    let coloringClasses;
+    if (isDarkDisk) {
+        coloringClasses = "bg-black";
+    } else if (isDarkDisk === false) {
+        coloringClasses = "bg-white";
+    };
 
-    return <button className="size-12 p-2 border" onClick={() => onPlay(num)}>{value}</button>;
+    return (
+        <button className="size-12 p-2 border" onClick={() => onPlay(num)}>
+            <div className={coloringClasses ? ("size-8 rounded-full " + coloringClasses) : ""}></div>
+        </button>
+    );
 }
