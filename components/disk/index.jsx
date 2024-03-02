@@ -1,15 +1,14 @@
 export default function Disk({ row, col, isDarkDisk, onPlay }) {
-    const num = row * 8 + col;
-    let coloringClasses;
+    let coloringClass;
     if (isDarkDisk) {
-        coloringClasses = "bg-black";
+        coloringClass = "bg-black";
     } else if (isDarkDisk === false) {
-        coloringClasses = "bg-white";
+        coloringClass = "bg-white";
     };
 
     return (
-        <button className="size-12 p-2 border" onClick={() => onPlay(num)}>
-            <div className={coloringClasses ? ("size-8 rounded-full " + coloringClasses) : ""}></div>
+        <button className="size-12 p-2 border" onClick={() => onPlay(row, col)}>
+            <div className={coloringClass ? ("size-8 rounded-full " + coloringClass) : ""}></div>
         </button>
     );
 }

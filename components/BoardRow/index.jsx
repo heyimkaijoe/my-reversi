@@ -1,7 +1,7 @@
 import Disk from "../Disk";
 
 export default function BoardRow({ row, disks, handlePlay }) {
-    console.log(disks);
+    // console.log(disks);
     const Disks = disks.map((disk, idx) => {
         return <Disk key={idx} row={row} col={idx} isDarkDisk={disk} onPlay={handlePlay} />;
     })
