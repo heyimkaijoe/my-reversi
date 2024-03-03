@@ -7,13 +7,15 @@ export default function Game() {
     const [currentMove, setCurrentMove] = useState(0);
     const darkIsNext = currentMove % 2 === 0;
     const currentDisks = history[currentMove];
-    const handlePlay = (num) => {
-        console.log(`${num} Clicked`);
-        if (currentDisks[num] !== null) return;
+    const nextDisks = currentDisks.slice();
+    const handlePlay = (row, col) => {
+        const diskIdx = calcDiskIdx(row, col);
+        console.log(`${diskIdx} Clicked`);
+        if (currentDisks[diskIdx] !== null) return;
 
-        const nextDisks = flipDisks(num);
+        const nextDisks = flipDisks(row, col);
         if (nextDisks) {
-            nextDisks[num] = darkIsNext;
+            nextDisks[diskIdx] = darkIsNext;
             const nextHistory = [...history.slice(), nextDisks];
 
             setHistory(nextHistory);
@@ -25,9 +27,11 @@ export default function Game() {
 
     let flippable = [];
     let temp = [];
-    const collectFlippable = () => {};
+    const collectFlippable = () => {
+        if (!(temp.every((idx) => nextDisks[idx] === !darkIsNext))) flippable = flippable.concat(temp.slice(0, temp.length - 1));
+        temp = [];
+    };
     const flipDisks = (row, col) => {
-        const nextDisks = currentDisks.slice();
         const maxDiskIdx = 7;
         const minDiskIdx = 0;
 
@@ -35,26 +39,24 @@ export default function Game() {
         for (let i = col + 1; i <= maxDiskIdx; i++) {
             let diskIdx = calcDiskIdx(row, i);
             if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
-            temp.push(i);
+            temp.push(diskIdx);
         };
         console.log(`hor +: ${temp}`);
-        if (!(temp.every((idx) => nextDisks[idx] === !darkIsNext))) flippable = flippable.concat(temp.slice(0, temp.length - 1));
-        temp = [];
+        collectFlippable();
         // horizontal -
         for (let i = col - 1; i >= minDiskIdx; i--) {
             let diskIdx = calcDiskIdx(row, i);
             if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
-            temp.push(i);
+            temp.push(diskIdx);
         };
         console.log(`hor -: ${temp}`);
-        if (!(temp.every((idx) => nextDisks[idx] === !darkIsNext))) flippable = flippable.concat(temp.slice(0, temp.length - 1));
-        temp = [];
+        collectFlippable();
 
         // vertical +
         for (let i = row + 1; i <= maxDiskIdx; i++) {
             let diskIdx = calcDiskIdx(i, col);
             if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
-            temp.push(i);
+            temp.push(diskIdx);
         }
         console.log(`ver +: ${temp}`);
         if (!(temp.every((idx) => nextDisks[idx] === !darkIsNext))) flippable = flippable.concat(temp.slice(0, temp.length - 1));
@@ -63,61 +65,59 @@ export default function Game() {
         for (let i = row - 1; row >= minDiskIdx; i--) {
             let diskIdx = calcDiskIdx(i, col);
             if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
-            temp.push(i);
+            temp.push(diskIdx);
         };
         console.log(`ver -: ${temp}`);
-        if (!(temp.every((idx) => nextDisks[idx] === !darkIsNext))) flippable = flippable.concat(temp.slice(0, temp.length - 1));
-        temp = [];
+        collectFlippable();
 
         // positive slope +
-        for (let i = row + 1; i <= maxDiskIdx; i++) {
-            for (let j = col - 1; j >= minDiskIdx; j--) {
-                let diskIdx = calcDiskIdx(i, j);
-                if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
-                temp.push(i);
-            };
-        };
+        for (let i = 1; i <= 7; i++) {
+            let nextRow = row + i;
+            let nextCol = col - i;
+            let diskIdx = calcDiskIdx(nextRow, nextCol);
+
+            if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
+                temp.push(diskIdx);
+        }
         console.log(`pos slope +: ${temp}`);
         if (!(temp.every((idx) => nextDisks[idx] === !darkIsNext))) flippable = flippable.concat(temp.slice(0, temp.length - 1));
         temp = [];
         // positive slope -
-        for (let i = row - 1; i >= minDiskIdx; i--) {
-            for (let j = col + 1; j <= maxDiskIdx; j++) {
-                let diskIdx = calcDiskIdx(i, j);
-                if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
-                temp.push(i);
-            };
-        };
+        for (let i = 1; i <= 7; i++) {
+            let nextRow = row - i;
+            let nextCol = col + i;
+            let diskIdx = calcDiskIdx(nextRow, nextCol);
+
+            if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
+                temp.push(diskIdx);
+        }
         console.log(`pos slope -: ${temp}`);
-        if (!(temp.every((idx) => nextDisks[idx] === !darkIsNext))) flippable = flippable.concat(temp.slice(0, temp.length - 1));
-        temp = [];
+        collectFlippable();
 
         // negative slope +
-        for (let i = row + 1; i <= maxDiskIdx; i++) {
-            for (let j = col + 1; j <= maxDiskIdx; j++) {
-                let diskIdx = calcDiskIdx(i, j);
-                if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
-                temp.push(i);
-            };
-        };
+        for (let i = 1; i <= 7; i++) {
+            let nextRow = row + i;
+            let nextCol = col + i;
+            let diskIdx = calcDiskIdx(nextRow, nextCol);
+
+            if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
+                temp.push(diskIdx);
+        }
         console.log(`neg slope +: ${temp}`);
-        if (!(temp.every((idx) => nextDisks[idx] === !darkIsNext))) flippable = flippable.concat(temp.slice(0, temp.length - 1));
-        temp = [];
+        collectFlippable();
         // negative slope -
-        for (let i = row - 1; i >= 0; i--) {
-            for (let j = col - 1; j >= 0; j--) {
-                let diskIdx = calcDiskIdx(i, j);
-                if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
-                temp.push(i);
-            };
-        };
+        for (let i = 1; i <= 7; i++) {
+            let nextRow = row - i;
+            let nextCol = col - i;
+            let diskIdx = calcDiskIdx(nextRow, nextCol);
+
+            if (nextDisks[diskIdx] === null || nextDisks[diskIdx] === undefined || (temp.filter((idx) => nextDisks[idx] === darkIsNext).length === 1)) break;
+                temp.push(diskIdx);
+        }
         console.log(`neg slope -: ${temp}`);
-        // ------ duplicate here ------
-        if (!(temp.every((idx) => nextDisks[idx] === !darkIsNext))) flippable = flippable.concat(temp.slice(0, temp.length - 1));
-        temp = [];
-        // ------ duplicate here ------
-        // TODO: make duplicates into function
-        // TODO: make back button
+        collectFlippable();
+        // TODO: make duplicates into functions
+        // TODO: make back(last move) button
         console.log(`flippable: ${flippable}`);
         if (flippable.length !== 0) {
             flippable.forEach((num) => {
