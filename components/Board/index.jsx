@@ -1,14 +1,17 @@
 import BoardRow from "../BoardRow";
 
-export default function Board({ currentSquares, darkIsNext, handlePlay, isPlayableSquare }) {
+export default function Board({ currentSquares, darkIsNext, handlePlay, playableSquares }) {
     const chunks = [];
     const chunkSize = 8;
     for (let i = 0; i < currentSquares.length; i += chunkSize) {
-        const chunk = currentSquares.slice(i, i + chunkSize);
+        const chunk = {
+            "current": currentSquares.slice(i, i + chunkSize),
+            "playable": playableSquares.slice(i, i + chunkSize),
+        };
         chunks.push(chunk);
     };
     const boardRows = chunks.map((chunk, idx) => {
-        return <BoardRow key={idx} row={idx} squares={chunk} handlePlay={handlePlay} isPlayableSquare={isPlayableSquare} />;
+        return <BoardRow key={idx} row={idx} squares={chunk.current} playableSquares={chunk.playable} handlePlay={handlePlay} />;
     });
     const status = "Next player: " + (darkIsNext ? "Dark" : "Light");
     const countDisksByType = (isDarkDisk) => currentSquares.filter((disk) => disk === isDarkDisk).length;

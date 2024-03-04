@@ -7,7 +7,7 @@ export default function Square({ row, col, isDarkDisk, onPlay, isPlayable }) {
     };
 
     return (
-        <button className={"size-12 p-2 border " + (isPlayable(row, col) ? "bg-green-300" : "")} onClick={() => onPlay(row, col)}>
+        <button className={"size-12 p-2 border " + (isPlayable ? "bg-green-300" : "")} onClick={() => onPlay(row, col)}>
             <div className={diskColoringClass ? ("size-8 rounded-full " + diskColoringClass) : ""}></div>
         </button>
     );

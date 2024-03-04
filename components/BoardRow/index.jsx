@@ -1,8 +1,8 @@
 import Square from "../Square";
 
-export default function BoardRow({ row, squares, handlePlay, isPlayableSquare }) {
+export default function BoardRow({ row, squares, handlePlay, playableSquares }) {
     const Squares = squares.map((square, idx) => {
-        return <Square key={idx} row={row} col={idx} isDarkDisk={square} onPlay={handlePlay} isPlayable={isPlayableSquare} />;
+        return <Square key={idx} row={row} col={idx} isDarkDisk={square} onPlay={handlePlay} isPlayable={playableSquares[idx]} />;
     })
 
     return (

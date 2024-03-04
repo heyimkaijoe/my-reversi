@@ -7,22 +7,6 @@ export default function Game() {
     const [currentMove, setCurrentMove] = useState(0);
     const darkIsNext = currentMove % 2 === 0;
     const currentSquares = history[currentMove];
-    const handlePlay = (row, col) => {
-        const squareIdx = calcSquareIdx(row, col);
-        console.log(`${squareIdx} Clicked`);
-        if (currentSquares[squareIdx] !== null) return;
-
-        const nextSquares = flipDisks(row, col);
-        if (nextSquares) {
-            nextSquares[squareIdx] = darkIsNext;
-            const nextHistory = [...history.slice(), nextSquares];
-
-            setHistory(nextHistory);
-            setCurrentMove(currentMove + 1);
-        } else {
-            return;
-        };
-    };
 
     let flippable = [];
     let temp = [];
@@ -43,14 +27,14 @@ export default function Game() {
             let squareIdx = calcSquareIdx(row, i);
             if (findFlippable(squareIdx) === undefined) break;
         };
-        console.log(`hor +: ${temp}`);
+        // console.log(`hor +: ${temp}`);
         collectFlippable();
         // horizontal -
         for (let i = col - 1; i >= minSquareIdx; i--) {
             let squareIdx = calcSquareIdx(row, i);
             if (findFlippable(squareIdx) === undefined) break;
         };
-        console.log(`hor -: ${temp}`);
+        // console.log(`hor -: ${temp}`);
         collectFlippable();
 
         // vertical +
@@ -58,14 +42,14 @@ export default function Game() {
             let squareIdx = calcSquareIdx(i, col);
             if (findFlippable(squareIdx) === undefined) break;
         }
-        console.log(`ver +: ${temp}`);
+        // console.log(`ver +: ${temp}`);
         collectFlippable();
         // vertical -
         for (let i = row - 1; i >= minSquareIdx; i--) {
             let squareIdx = calcSquareIdx(i, col);
             if (findFlippable(squareIdx) === undefined) break;
         };
-        console.log(`ver -: ${temp}`);
+        // console.log(`ver -: ${temp}`);
         collectFlippable();
 
         // positive slope +
@@ -76,7 +60,7 @@ export default function Game() {
 
             if (findFlippable(squareIdx) === undefined) break;
         }
-        console.log(`pos slope +: ${temp}`);
+        // console.log(`pos slope +: ${temp}`);
         collectFlippable();
         // positive slope -
         for (let i = 1; i <= 7; i++) {
@@ -86,7 +70,7 @@ export default function Game() {
 
             if (findFlippable(squareIdx) === undefined) break;
         }
-        console.log(`pos slope -: ${temp}`);
+        // console.log(`pos slope -: ${temp}`);
         collectFlippable();
 
         // negative slope +
@@ -97,7 +81,7 @@ export default function Game() {
 
             if (findFlippable(squareIdx) === undefined) break;
         }
-        console.log(`neg slope +: ${temp}`);
+        // console.log(`neg slope +: ${temp}`);
         collectFlippable();
         // negative slope -
         for (let i = 1; i <= 7; i++) {
@@ -107,11 +91,11 @@ export default function Game() {
 
             if (findFlippable(squareIdx) === undefined) break;
         }
-        console.log(`neg slope -: ${temp}`);
+        // console.log(`neg slope -: ${temp}`);
         collectFlippable();
 
         if (flippable.length !== 0) {
-            console.log(`flippable: ${flippable}`);
+            // console.log(`flippable: ${flippable}`);
             const nextSquares = currentSquares.slice();
             flippable.forEach((num) => {
                 nextSquares[num] = darkIsNext;
@@ -119,7 +103,7 @@ export default function Game() {
             flippable = [];
             return nextSquares;
         } else {
-            console.log("no flippable");
+            // console.log("no flippable");
             return;
         };
     };
@@ -134,23 +118,38 @@ export default function Game() {
         setCurrentMove(0);
     };
 
-    const isPlayableSquare = (row, col) => {
-        let squareIdx = calcSquareIdx(row, col);
-        if (currentSquares[squareIdx] === null) {
-            return (flipDisks(row, col) === undefined) ? false : true;
+    const playableSquares = currentSquares.slice().map((square, idx) => {
+        if (square === null) {
+            let rowNCol = calRowNCol(idx);
+            return (flipDisks(rowNCol.row, rowNCol.col) === undefined) ? false : true;
         } else {
             return false;
+        };
+    });
+    const handlePlay = (row, col) => {
+        const squareIdx = calcSquareIdx(row, col);
+        console.log(`${squareIdx} Clicked`);
+        if (currentSquares[squareIdx] !== null) return;
+
+        const nextSquares = flipDisks(row, col);
+        if (nextSquares) {
+            nextSquares[squareIdx] = darkIsNext;
+            const nextHistory = [...history.slice(), nextSquares];
+
+            setHistory(nextHistory);
+            setCurrentMove(currentMove + 1);
         };
     };
 
     return (
         // TODO: assess winner
+        // -> collect isPlayableSquare data (as playableSquares(naming?)) and check data to decide -> pass part of playableSquares down as props
         // -> no play then pass
         // -> two passes || all squares are filled == Game Over
-        // -> collect isPlayableSquare data and check data to decide
+        
         // TODO: RWD for mobile
         <div className="flex justify-center">
-            <Board currentSquares={currentSquares} darkIsNext={darkIsNext} handlePlay={handlePlay} isPlayableSquare={isPlayableSquare}/>
+            <Board currentSquares={currentSquares} darkIsNext={darkIsNext} handlePlay={handlePlay} playableSquares={playableSquares}/>
             <div className="flex flex-col gap-2 ml-4">
                 <button onClick={jumpToLastMove} className="border rounded p-2">Last Move</button>
                 <button onClick={resetGame} className="border rounded p-2">Reset</button>
@@ -164,3 +163,16 @@ function calcSquareIdx(row, col) {
         return row * 8 + col;
     };
 }
+
+function calRowNCol(squareIdx) {
+    return {
+        "row": Math.floor(squareIdx / 8),
+        "col": squareIdx % 8,
+    };
+}
+
+function isCurrentPlayable(playableSquares) {
+    return !playableSquares.every((square) => square === false);
+}
+
+function assessWinner() {}
