@@ -8,6 +8,6 @@ export default function App() {
 }
 // Game: 1(+ status + reset btn + back/next btns)
     //  Board: 1
-    //   Disk: 64(8x8)
+    //   Square: 64(8x8)
     // 
     // States needed: history, currentMove

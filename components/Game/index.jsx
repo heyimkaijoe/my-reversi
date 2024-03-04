@@ -6,16 +6,16 @@ export default function Game() {
     const [history, setHistory] = useState([initialBoard]);
     const [currentMove, setCurrentMove] = useState(0);
     const darkIsNext = currentMove % 2 === 0;
-    const currentDisks = history[currentMove];
+    const currentSquares = history[currentMove];
     const handlePlay = (row, col) => {
-        const diskIdx = calcDiskIdx(row, col);
-        console.log(`${diskIdx} Clicked`);
-        if (currentDisks[diskIdx] !== null) return;
+        const squareIdx = calcSquareIdx(row, col);
+        console.log(`${squareIdx} Clicked`);
+        if (currentSquares[squareIdx] !== null) return;
 
-        const nextDisks = flipDisks(row, col);
-        if (nextDisks) {
-            nextDisks[diskIdx] = darkIsNext;
-            const nextHistory = [...history.slice(), nextDisks];
+        const nextSquares = flipDisks(row, col);
+        if (nextSquares) {
+            nextSquares[squareIdx] = darkIsNext;
+            const nextHistory = [...history.slice(), nextSquares];
 
             setHistory(nextHistory);
             setCurrentMove(currentMove + 1);
@@ -26,44 +26,44 @@ export default function Game() {
 
     let flippable = [];
     let temp = [];
-    const findFlippable = (diskIdx) => {
-        if (currentDisks[diskIdx] === null || currentDisks[diskIdx] === undefined || (temp.filter((idx) => currentDisks[idx] === darkIsNext).length === 1)) return;
-        return temp.push(diskIdx);
+    const findFlippable = (squareIdx) => {
+        if (currentSquares[squareIdx] === null || currentSquares[squareIdx] === undefined || (temp.filter((idx) => currentSquares[idx] === darkIsNext).length === 1)) return;
+        return temp.push(squareIdx);
     };
     const collectFlippable = () => {
-        if (!(temp.every((idx) => currentDisks[idx] === !darkIsNext))) flippable = flippable.concat(temp.slice(0, temp.length - 1));
+        if (!(temp.every((idx) => currentSquares[idx] === !darkIsNext))) flippable = flippable.concat(temp.slice(0, temp.length - 1));
         temp = [];
     };
     const flipDisks = (row, col) => {
-        const maxDiskIdx = 7;
-        const minDiskIdx = 0;
+        const maxSquareIdx = 7;
+        const minSquareIdx = 0;
 
         // horizontal +
-        for (let i = col + 1; i <= maxDiskIdx; i++) {
-            let diskIdx = calcDiskIdx(row, i);
-            if (findFlippable(diskIdx) === undefined) break;
+        for (let i = col + 1; i <= maxSquareIdx; i++) {
+            let squareIdx = calcSquareIdx(row, i);
+            if (findFlippable(squareIdx) === undefined) break;
         };
         console.log(`hor +: ${temp}`);
         collectFlippable();
         // horizontal -
-        for (let i = col - 1; i >= minDiskIdx; i--) {
-            let diskIdx = calcDiskIdx(row, i);
-            if (findFlippable(diskIdx) === undefined) break;
+        for (let i = col - 1; i >= minSquareIdx; i--) {
+            let squareIdx = calcSquareIdx(row, i);
+            if (findFlippable(squareIdx) === undefined) break;
         };
         console.log(`hor -: ${temp}`);
         collectFlippable();
 
         // vertical +
-        for (let i = row + 1; i <= maxDiskIdx; i++) {
-            let diskIdx = calcDiskIdx(i, col);
-            if (findFlippable(diskIdx) === undefined) break;
+        for (let i = row + 1; i <= maxSquareIdx; i++) {
+            let squareIdx = calcSquareIdx(i, col);
+            if (findFlippable(squareIdx) === undefined) break;
         }
         console.log(`ver +: ${temp}`);
         collectFlippable();
         // vertical -
-        for (let i = row - 1; i >= minDiskIdx; i--) {
-            let diskIdx = calcDiskIdx(i, col);
-            if (findFlippable(diskIdx) === undefined) break;
+        for (let i = row - 1; i >= minSquareIdx; i--) {
+            let squareIdx = calcSquareIdx(i, col);
+            if (findFlippable(squareIdx) === undefined) break;
         };
         console.log(`ver -: ${temp}`);
         collectFlippable();
@@ -72,9 +72,9 @@ export default function Game() {
         for (let i = 1; i <= 7; i++) {
             let nextRow = row + i;
             let nextCol = col - i;
-            let diskIdx = calcDiskIdx(nextRow, nextCol);
+            let squareIdx = calcSquareIdx(nextRow, nextCol);
 
-            if (findFlippable(diskIdx) === undefined) break;
+            if (findFlippable(squareIdx) === undefined) break;
         }
         console.log(`pos slope +: ${temp}`);
         collectFlippable();
@@ -82,9 +82,9 @@ export default function Game() {
         for (let i = 1; i <= 7; i++) {
             let nextRow = row - i;
             let nextCol = col + i;
-            let diskIdx = calcDiskIdx(nextRow, nextCol);
+            let squareIdx = calcSquareIdx(nextRow, nextCol);
 
-            if (findFlippable(diskIdx) === undefined) break;
+            if (findFlippable(squareIdx) === undefined) break;
         }
         console.log(`pos slope -: ${temp}`);
         collectFlippable();
@@ -93,9 +93,9 @@ export default function Game() {
         for (let i = 1; i <= 7; i++) {
             let nextRow = row + i;
             let nextCol = col + i;
-            let diskIdx = calcDiskIdx(nextRow, nextCol);
+            let squareIdx = calcSquareIdx(nextRow, nextCol);
 
-            if (findFlippable(diskIdx) === undefined) break;
+            if (findFlippable(squareIdx) === undefined) break;
         }
         console.log(`neg slope +: ${temp}`);
         collectFlippable();
@@ -103,21 +103,21 @@ export default function Game() {
         for (let i = 1; i <= 7; i++) {
             let nextRow = row - i;
             let nextCol = col - i;
-            let diskIdx = calcDiskIdx(nextRow, nextCol);
+            let squareIdx = calcSquareIdx(nextRow, nextCol);
 
-            if (findFlippable(diskIdx) === undefined) break;
+            if (findFlippable(squareIdx) === undefined) break;
         }
         console.log(`neg slope -: ${temp}`);
         collectFlippable();
 
         if (flippable.length !== 0) {
             console.log(`flippable: ${flippable}`);
-            const nextDisks = currentDisks.slice();
+            const nextSquares = currentSquares.slice();
             flippable.forEach((num) => {
-                nextDisks[num] = darkIsNext;
+                nextSquares[num] = darkIsNext;
             });
             flippable = [];
-            return nextDisks;
+            return nextSquares;
         } else {
             console.log("no flippable");
             return;
@@ -135,8 +135,8 @@ export default function Game() {
     };
 
     const isPlayableSquare = (row, col) => {
-        let diskIdx = calcDiskIdx(row, col);
-        if (currentDisks[diskIdx] === null) {
+        let squareIdx = calcSquareIdx(row, col);
+        if (currentSquares[squareIdx] === null) {
             return (flipDisks(row, col) === undefined) ? false : true;
         } else {
             return false;
@@ -144,8 +144,13 @@ export default function Game() {
     };
 
     return (
+        // TODO: assess winner
+        // -> no play then pass
+        // -> two passes || all squares are filled == Game Over
+        // -> collect isPlayableSquare data and check data to decide
+        // TODO: RWD for mobile
         <div className="flex justify-center">
-            <Board currentDisks={currentDisks} darkIsNext={darkIsNext} handlePlay={handlePlay} isPlayableSquare={isPlayableSquare}/>
+            <Board currentSquares={currentSquares} darkIsNext={darkIsNext} handlePlay={handlePlay} isPlayableSquare={isPlayableSquare}/>
             <div className="flex flex-col gap-2 ml-4">
                 <button onClick={jumpToLastMove} className="border rounded p-2">Last Move</button>
                 <button onClick={resetGame} className="border rounded p-2">Reset</button>
@@ -154,7 +159,7 @@ export default function Game() {
     );
 }
 
-function calcDiskIdx(row, col) {
+function calcSquareIdx(row, col) {
     if ((0 <= row && row <= 7) && (0 <= col && col <= 7)) {
         return row * 8 + col;
     };
