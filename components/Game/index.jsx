@@ -110,28 +110,46 @@ export default function Game() {
         console.log(`neg slope -: ${temp}`);
         collectFlippable();
 
-        // TODO: make back(last move) button
-        console.log(`flippable: ${flippable}`);
         if (flippable.length !== 0) {
+            console.log(`flippable: ${flippable}`);
             const nextDisks = currentDisks.slice();
             flippable.forEach((num) => {
                 nextDisks[num] = darkIsNext;
             });
+            flippable = [];
             return nextDisks;
         } else {
             console.log("no flippable");
             return;
         };
     };
+    
     const jumpToLastMove = () => {
+        if (currentMove === 0) return;
         setHistory(history.slice(0, -1));
         setCurrentMove(currentMove - 1);
+    };
+    const resetGame = () => {
+        setHistory([initialBoard]);
+        setCurrentMove(0);
+    };
+
+    const isPlayableSquare = (row, col) => {
+        let diskIdx = calcDiskIdx(row, col);
+        if (currentDisks[diskIdx] === null) {
+            return (flipDisks(row, col) === undefined) ? false : true;
+        } else {
+            return false;
+        };
     };
 
     return (
         <div className="flex justify-center">
-            <Board currentDisks={currentDisks} darkIsNext={darkIsNext} handlePlay={handlePlay}/>
-            <button onClick={jumpToLastMove} className="ml-4 border rounded p-2 cursor-pointer">Last Move</button>
+            <Board currentDisks={currentDisks} darkIsNext={darkIsNext} handlePlay={handlePlay} isPlayableSquare={isPlayableSquare}/>
+            <div className="flex flex-col gap-2 ml-4">
+                <button onClick={jumpToLastMove} className="border rounded p-2">Last Move</button>
+                <button onClick={resetGame} className="border rounded p-2">Reset</button>
+            </div>
         </div>
     );
 }
