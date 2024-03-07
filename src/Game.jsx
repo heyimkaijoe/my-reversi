@@ -1,5 +1,6 @@
 import { useState } from "react";
-import Board from "../Board";
+import Board from "../components/Board";
+import "./Game.css";
 
 export default function Game() {
     const initialBoard = [...Array(27).fill(null), false, true, ...Array(6).fill(null), true, false, ...Array(27).fill(null)];
@@ -136,6 +137,7 @@ export default function Game() {
             nextSquares[squareIdx] = darkIsNext;
             const nextHistory = [...history.slice(), nextSquares];
 
+            // use updater function inside setState functions to get lastest states
             setHistory(nextHistory);
             setCurrentMove(currentMove + 1);
         };
@@ -176,3 +178,13 @@ function isCurrentPlayable(playableSquares) {
 }
 
 function assessWinner() {}
+// Game: 1(+ status + reset btn + back/next btns)
+    //  Board: 1
+    //   Square: 64(8x8)
+    // 
+    // States needed: history, currentMove
+// TODO: remove component App -> use Game component as top-level component is fine
+// TODO: check if there're any places that can pass JSX as children
+// ref: https://react.dev/learn/passing-props-to-a-component#passing-jsx-as-children
+// hover effect -> onPointerEnter/onPointerLeave
+// return <>{someCondition && <Component />}</>
