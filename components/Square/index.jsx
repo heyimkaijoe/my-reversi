@@ -1,8 +1,8 @@
-export default function Square({ row, col, isDarkDisk, onPlay, isPlayable }) {
+export default function Square({ row, col, diskIsDark, onPlay, isPlayable }) {
     let diskColoringClass;
-    if (isDarkDisk) {
+    if (diskIsDark) {
         diskColoringClass = " bg-black";
-    } else if (isDarkDisk === false) {
+    } else if (diskIsDark === false) {
         diskColoringClass = " bg-white";
     };
 
