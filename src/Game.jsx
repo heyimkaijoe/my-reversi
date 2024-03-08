@@ -5,19 +5,34 @@ import "./Game.css";
 let flippable = [];
 let temp = [];
 let cumNoLegalMoves = [];
-let darkIsWinner;
 
 export default function Game() {
     const initialBoard = [...Array(27).fill(null), false, true, ...Array(6).fill(null), true, false, ...Array(27).fill(null)];
+
     const [history, setHistory] = useState([initialBoard]);
     const [currentMove, setCurrentMove] = useState(0);
+    const [darkIsWinner, setDarkIsWinner] = useState(undefined);
+
     const currDarkIsNext = calcDarkIsNext(currentMove);
     const currentSquares = history[currentMove];
     const currPlayableSquares = calcPlayableSquares(currentMove, currentSquares);
 
+    const assessWinner = (squares) => {
+        const darkCount = countDisksByType(squares, true);
+        const lightCount = countDisksByType(squares, false);
+    
+        if (darkCount > lightCount) {
+            setDarkIsWinner(true);
+        } else if (darkCount < lightCount) {
+            setDarkIsWinner(false);
+        } else {
+            setDarkIsWinner(null);
+        };
+    };
+
     const checkNextMoves = (nextMove, nextSquares) => {
         if (nextSquares.every((square) => square !== null)) {
-            console.log("Game Over");
+            console.log("Game Over"); 
             assessWinner(nextSquares);
         } else if (calcPlayableSquares(nextMove, nextSquares).every((square) => square === false)) {
             const nextPlayer = (calcDarkIsNext(nextMove) ? "Dark" : "Light") + " player";
@@ -54,24 +69,41 @@ export default function Game() {
     
     const jumpToLastMove = () => {
         if (currentMove === 0) return;
+
         setHistory(history.slice(0, -1));
         setCurrentMove(currentMove - 1);
+        setDarkIsWinner(undefined);
     };
 
     const resetGame = () => {
         setHistory([initialBoard]);
         setCurrentMove(0);
+        setDarkIsWinner(undefined);
     };
+
+    let status;
+    if (darkIsWinner) {
+        status = "Winner: Dark";
+    } else if (darkIsWinner === false) {
+        status = "Winner: Light";
+    } else if (darkIsWinner === null) {
+        status = "Draw";
+    } else {
+        status = "Next player: " + (currDarkIsNext ? "Dark" : "Light");
+    };
+
+    const scores = "Dark: " + countDisksByType(currentSquares, true) + ", Light: " + countDisksByType(currentSquares, false);
 
     return (
         // TODO: RWD for mobile
         <div className="flex justify-center">
             <Board currentSquares={currentSquares}
-                   darkIsNext={currDarkIsNext}
                    handlePlay={handlePlay}
                    playableSquares={currPlayableSquares}
-                   darkIsWinner={darkIsWinner}
-            />
+            >
+                <div className="text-3xl mb-2">{status}</div>
+                <div className="text-2xl mb-2">{scores}</div>
+            </Board>
             <div className="flex flex-col gap-2 ml-4">
                 <button onClick={jumpToLastMove} className="border rounded p-2">Last Move</button>
                 <button onClick={resetGame} className="border rounded p-2">Reset</button>
@@ -209,20 +241,10 @@ function calcPlayableSquares(move, squares) {
     });
 }
 
-function assessWinner(squares) {
-    const darkCount = squares.filter((square) => square === true).length;
-    const lightCount = squares.filter((square) => square === false).length;
-
-    if (darkCount > lightCount) {
-        darkIsWinner = true;
-    } else if (darkCount < lightCount) {
-        darkIsWinner = false;
-    } else {
-        darkIsWinner = null;
-    };
+function countDisksByType(squares, diskIsDark) {
+    return squares.filter((disk) => disk === diskIsDark).length;
 }
 
 // TODO: check if there're any places that can pass JSX as children
 // ref: https://react.dev/learn/passing-props-to-a-component#passing-jsx-as-children
-// hover effect -> onPointerEnter/onPointerLeave
 // return <>{someCondition && <Component />}</>

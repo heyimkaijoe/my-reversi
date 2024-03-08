@@ -1,6 +1,6 @@
 import BoardRow from "../BoardRow";
 
-export default function Board({ currentSquares, darkIsNext, handlePlay, playableSquares, darkIsWinner }) {
+export default function Board({ children, currentSquares, handlePlay, playableSquares }) {
     const chunks = [];
     const chunkSize = 8;
     for (let i = 0; i < currentSquares.length; i += chunkSize) {
@@ -13,25 +13,12 @@ export default function Board({ currentSquares, darkIsNext, handlePlay, playable
     const boardRows = chunks.map((chunk, idx) => {
         return <BoardRow key={idx} row={idx} squares={chunk.current} playableSquares={chunk.playable} handlePlay={handlePlay} />;
     });
-
-    let status;
-    if (darkIsWinner) {
-        status = "Dark player wins";
-    } else if (darkIsWinner === false) {
-        status = "Light player wins";
-    } else if (darkIsNext === null) {
-        status = "Draw";
-    } else {
-        status = "Next player: " + (darkIsNext ? "Dark" : "Light");
-    };
     
-    const countDisksByType = (diskIsDark) => currentSquares.filter((disk) => disk === diskIsDark).length;
-    const scores = "Dark: " + countDisksByType(true) + ", Light: " + countDisksByType(false);
+    
 
     return (
         <div className="flex flex-col">
-            <div className="text-3xl mb-2">{status}</div>
-            <div className="text-2xl mb-2">{scores}</div>
+            {children}
             <div>{boardRows}</div>
         </div>
     );
