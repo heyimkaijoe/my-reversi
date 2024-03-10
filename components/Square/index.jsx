@@ -1,13 +1,13 @@
 export default function Square({ row, col, diskIsDark, onPlay, isPlayable }) {
     let diskColoringClass;
     if (diskIsDark) {
-        diskColoringClass = " bg-black";
+        diskColoringClass = " dark-disk";
     } else if (diskIsDark === false) {
-        diskColoringClass = " bg-white";
+        diskColoringClass = " light-disk";
     };
 
     return (
-        <button className={"size-12 p-2 border" + (isPlayable ? " bg-green-300" : "")} onClick={() => onPlay(row, col)}>
+        <button className={"size-12 p-2 border border-black" + (isPlayable ? " bg-green-200" : "")} onClick={() => onPlay(row, col)}>
             <div className={diskColoringClass ? ("size-8 rounded-full" + diskColoringClass) : ""}></div>
         </button>
     );

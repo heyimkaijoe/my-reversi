@@ -1,6 +1,6 @@
 import BoardRow from "../BoardRow";
 
-export default function Board({ children, currentSquares, handlePlay, playableSquares }) {
+export default function Board({ currentSquares, handlePlay, playableSquares }) {
     const chunks = [];
     const chunkSize = 8;
     for (let i = 0; i < currentSquares.length; i += chunkSize) {
@@ -18,7 +18,6 @@ export default function Board({ children, currentSquares, handlePlay, playableSq
 
     return (
         <div className="flex flex-col">
-            {children}
             <div>{boardRows}</div>
         </div>
     );

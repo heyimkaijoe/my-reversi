@@ -1,12 +1,16 @@
 import { useState } from "react";
 import Board from "../components/Board";
 import "./Game.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight, faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 
 let flippable = [];
 let temp = [];
 let cumNoLegalMoves = [];
 
 export default function Game() {
+    const xIndexes = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const yIndexes = [1, 2, 3, 4, 5, 6, 7, 8];
     const initialBoard = [...Array(27).fill(null), false, true, ...Array(6).fill(null), true, false, ...Array(27).fill(null)];
 
     const [history, setHistory] = useState([initialBoard]);
@@ -81,34 +85,72 @@ export default function Game() {
         setDarkIsWinner(undefined);
     };
 
-    let status;
+    let winnerStatus;
+    let winnerStatusClass;
     if (darkIsWinner) {
-        status = "Winner: Dark";
+        winnerStatus = "Dark";
+        winnerStatusClass = "text-red-900";
     } else if (darkIsWinner === false) {
-        status = "Winner: Light";
+        winnerStatus = "Light";
+        winnerStatusClass = "text-white";
     } else if (darkIsWinner === null) {
-        status = "Draw";
+        winnerStatus = "Draw";
     } else {
-        status = "Next player: " + (currDarkIsNext ? "Dark" : "Light");
+        winnerStatus = "????";
     };
-
-    const scores = "Dark: " + countDisksByType(currentSquares, true) + ", Light: " + countDisksByType(currentSquares, false);
 
     return (
         // TODO: RWD for mobile
-        <div className="flex justify-center">
-            <Board currentSquares={currentSquares}
-                   handlePlay={handlePlay}
-                   playableSquares={currPlayableSquares}
-            >
-                <div className="text-3xl mb-2">{status}</div>
-                <div className="text-2xl mb-2">{scores}</div>
-            </Board>
-            <div className="flex flex-col gap-2 ml-4">
-                <button onClick={jumpToLastMove} className="border rounded p-2">Last Move</button>
-                <button onClick={resetGame} className="border rounded p-2">Reset</button>
+        <>
+            <h1 className="title">Reversi</h1>
+
+            <div className="flex justify-center">
+                <div className="p-6 border rounded border-black bg-[#48120c]">
+                    <div className="bg-green-600 border border-black rounded">
+                        <Board currentSquares={currentSquares}
+                               handlePlay={handlePlay}
+                               playableSquares={currPlayableSquares}
+                        />
+                    </div>
+                </div>
+
+                <div className="flex flex-col text-3xl font-semibold ml-6">
+                    <div className="mb-6">
+                        <fieldset className="border-4 border-white rounded text-white p-2">
+                            <legend className="text-2xl">&nbsp;Winner&nbsp;</legend>
+                            <span className={winnerStatusClass}>{winnerStatus}</span>
+                        </fieldset>
+                    </div>
+
+                    
+                    <div className="min-w-[160px] inline-block text-4xl text-white p-2">
+                        <div className="score gap-4">
+                            {(darkIsWinner === undefined && currDarkIsNext) &&
+                                <FontAwesomeIcon icon={faArrowRight} className="text-blue-700" beatFade />}
+                            <div className="size-10 rounded-full dark-disk"></div>
+                            <div className="w-10 text-right">{countDisksByType(currentSquares, true)}</div>
+                        </div>
+
+                        <div className="score mt-2">
+                            {(darkIsWinner === undefined && !currDarkIsNext) &&
+                                <FontAwesomeIcon icon={faArrowRight} className="text-blue-700" beatFade />}
+                            <div className="size-10 rounded-full light-disk"></div>
+                            <div className="w-10 text-right">{countDisksByType(currentSquares, false)}</div>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-4 mt-40">
+                        <button onClick={jumpToLastMove} className="button">
+                            <FontAwesomeIcon icon={faArrowRight} rotation={180} size="lg" className="text-orange-600" />
+                        </button>
+
+                        <button onClick={resetGame} className="button">
+                            <FontAwesomeIcon icon={faArrowsRotate} size="lg" className="text-red-600" />
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
@@ -244,7 +286,3 @@ function calcPlayableSquares(move, squares) {
 function countDisksByType(squares, diskIsDark) {
     return squares.filter((disk) => disk === diskIsDark).length;
 }
-
-// TODO: check if there're any places that can pass JSX as children
-// ref: https://react.dev/learn/passing-props-to-a-component#passing-jsx-as-children
-// return <>{someCondition && <Component />}</>
