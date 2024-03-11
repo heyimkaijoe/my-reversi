@@ -9,8 +9,6 @@ let temp = [];
 let cumNoLegalMoves = [];
 
 export default function Game() {
-    const xIndexes = ["a", "b", "c", "d", "e", "f", "g", "h"];
-    const yIndexes = [1, 2, 3, 4, 5, 6, 7, 8];
     const initialBoard = [...Array(27).fill(null), false, true, ...Array(6).fill(null), true, false, ...Array(27).fill(null)];
 
     const [history, setHistory] = useState([initialBoard]);
