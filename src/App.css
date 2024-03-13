@@ -1,7 +1,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 4rem 12rem;
+  padding: 3rem 12rem 0;
   text-align: center;
 }
 
@@ -9,8 +9,16 @@
   @apply bg-black;
 }
 
+.dark-text {
+  @apply text-black;
+}
+
 .light-disk {  
   @apply bg-white;
+}
+
+.light-text {  
+  @apply text-white;
 }
 
 .neon-text {
@@ -52,7 +60,7 @@
 
 .title {
   animation: pulsate 4.5s ease-in-out infinite alternate;
-  @apply inline-block neon-text text-[160px] mb-6 rounded-3xl;
+  @apply neon-text text-[160px] mb-6 rounded-3xl;
 }
 
 .button {
@@ -61,4 +69,8 @@
 
 .score {
   @apply flex justify-end items-center gap-4;
+}
+
+.footer {
+  @apply text-white mt-12;
 }
