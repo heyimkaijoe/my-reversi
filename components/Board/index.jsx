@@ -16,9 +16,5 @@ export default function Board({ currentSquares, handlePlay, playableSquares }) {
     
     
 
-    return (
-        <div className="flex flex-col">
-            <div>{boardRows}</div>
-        </div>
-    );
+    return <div className="flex flex-col">{boardRows}</div>;
 }

@@ -98,8 +98,8 @@ export default function Game() {
 
     return (
         // TODO: RWD for mobile
-        <div className="flex justify-center">
-            <div className="p-6 border rounded border-black bg-[#48120c]">
+        <div className="flex flex-col-reverse md:flex-row justify-center">
+            <div className="mx-auto md:mx-0 p-6 border rounded border-black bg-[#48120c]">
                 <div className="bg-green-600 border border-black rounded">
                     <Board currentSquares={currentSquares}
                             handlePlay={handlePlay}
@@ -108,32 +108,29 @@ export default function Game() {
                 </div>
             </div>
 
-            <div className="flex flex-col text-3xl font-semibold ml-6">
-                <div className="mb-6">
-                    <fieldset className="border-4 border-white rounded text-white p-2">
-                        <legend className="text-2xl">&nbsp;Winner&nbsp;</legend>
-                        <span className={winnerStatusClass}>{winnerStatus}</span>
-                    </fieldset>
-                </div>
-
-                
-                <div className="min-w-[160px] inline-block text-4xl text-white p-2">
-                    <div className="score gap-4">
+            <div className="flex justify-around md:justify-normal items-center md:flex-col font-semibold mb-3 md:mx-6">
+                <div className="md:min-w-[160px] inline-block text-2xl md:text-4xl text-white p-2 md:mb-6">
+                    <div className="score">
                         {(darkIsWinner === undefined && currDarkIsNext) &&
                             <FontAwesomeIcon icon={faArrowRight} className="text-blue-700" beatFade />}
-                        <div className="size-10 rounded-full dark-disk"></div>
-                        <div className="w-10 text-right">{countDisksByType(currentSquares, true)}</div>
+                        <div className="size-8 md:size-10 rounded-full dark-disk"></div>
+                        <div className="w-8 md:w-10 text-right">{countDisksByType(currentSquares, true)}</div>
                     </div>
 
                     <div className="score mt-2">
                         {(darkIsWinner === undefined && !currDarkIsNext) &&
                             <FontAwesomeIcon icon={faArrowRight} className="text-blue-700" beatFade />}
-                        <div className="size-10 rounded-full light-disk"></div>
-                        <div className="w-10 text-right">{countDisksByType(currentSquares, false)}</div>
+                        <div className="size-8 md:size-10 rounded-full light-disk"></div>
+                        <div className="w-8 md:w-10 text-right">{countDisksByType(currentSquares, false)}</div>
                     </div>
                 </div>
 
-                <div className="flex gap-4 mt-40">
+                <fieldset className="winner">
+                    <legend className="text-lg md:text-2xl">&nbsp;Winner&nbsp;</legend>
+                    <span className={winnerStatusClass}>{winnerStatus}</span>
+                </fieldset>
+
+                <div className="flex gap-2 md:self-stretch text-3xl md:gap-4 md:mt-40">
                     <button onClick={jumpToLastMove} className="button">
                         <FontAwesomeIcon icon={faArrowRight} rotation={180} size="lg" className="text-orange-600" />
                     </button>
