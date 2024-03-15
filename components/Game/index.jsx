@@ -97,7 +97,6 @@ export default function Game() {
     };
 
     return (
-        // TODO: RWD for mobile
         <div className="flex flex-col-reverse md:flex-row justify-center">
             <div className="mx-auto md:mx-0 p-6 border rounded border-black bg-[#48120c]">
                 <div className="bg-green-600 border border-black rounded">
@@ -181,14 +180,12 @@ function flipDisks(move, squares, row, col) {
         let squareIdx = calcSquareIdx(row, i);
         if (findFlippable(darkIsNext, squares, squareIdx) === undefined) break;
     };
-    // console.log(`hor +: ${temp}`);
     collectFlippable(darkIsNext, squares);
     // horizontal -
     for (let i = col - 1; i >= minSquareIdx; i--) {
         let squareIdx = calcSquareIdx(row, i);
         if (findFlippable(darkIsNext, squares, squareIdx) === undefined) break;
     };
-    // console.log(`hor -: ${temp}`);
     collectFlippable(darkIsNext, squares);
 
     // vertical +
@@ -196,14 +193,12 @@ function flipDisks(move, squares, row, col) {
         let squareIdx = calcSquareIdx(i, col);
         if (findFlippable(darkIsNext, squares, squareIdx) === undefined) break;
     }
-    // console.log(`ver +: ${temp}`);
     collectFlippable(darkIsNext, squares);
     // vertical -
     for (let i = row - 1; i >= minSquareIdx; i--) {
         let squareIdx = calcSquareIdx(i, col);
         if (findFlippable(darkIsNext, squares, squareIdx) === undefined) break;
     };
-    // console.log(`ver -: ${temp}`);
     collectFlippable(darkIsNext, squares);
 
     // positive slope +
@@ -214,7 +209,6 @@ function flipDisks(move, squares, row, col) {
 
         if (findFlippable(darkIsNext, squares, squareIdx) === undefined) break;
     }
-    // console.log(`pos slope +: ${temp}`);
     collectFlippable(darkIsNext, squares);
     // positive slope -
     for (let i = 1; i <= 7; i++) {
@@ -224,7 +218,6 @@ function flipDisks(move, squares, row, col) {
 
         if (findFlippable(darkIsNext, squares, squareIdx) === undefined) break;
     }
-    // console.log(`pos slope -: ${temp}`);
     collectFlippable(darkIsNext, squares);
 
     // negative slope +
@@ -235,7 +228,6 @@ function flipDisks(move, squares, row, col) {
 
         if (findFlippable(darkIsNext, squares, squareIdx) === undefined) break;
     }
-    // console.log(`neg slope +: ${temp}`);
     collectFlippable(darkIsNext, squares);
     // negative slope -
     for (let i = 1; i <= 7; i++) {
@@ -245,11 +237,9 @@ function flipDisks(move, squares, row, col) {
 
         if (findFlippable(darkIsNext, squares, squareIdx) === undefined) break;
     }
-    // console.log(`neg slope -: ${temp}`);
     collectFlippable(darkIsNext, squares);
 
     if (flippable.length !== 0) {
-        // console.log(`flippable: ${flippable}`);
         const nextSquares = squares.slice();
         flippable.forEach((num) => {
             nextSquares[num] = darkIsNext;
@@ -257,7 +247,6 @@ function flipDisks(move, squares, row, col) {
         flippable = [];
         return nextSquares;
     } else {
-        // console.log("no flippable");
         return;
     };
 }
