@@ -109,7 +109,7 @@ export default function Game() {
             </div>
 
             <div className="flex justify-around md:justify-normal items-center md:flex-col font-semibold mb-3 md:mx-6">
-                <div className="md:min-w-[160px] inline-block text-2xl md:text-4xl text-white p-2 md:mb-6">
+                <div className="min-w-[118px] md:min-w-[160px] inline-block text-2xl md:text-4xl text-white p-2 md:mb-6">
                     <div className="score">
                         {(darkIsWinner === undefined && currDarkIsNext) &&
                             <FontAwesomeIcon icon={faArrowRight} className="text-blue-700" beatFade />}
