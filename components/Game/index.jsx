@@ -33,7 +33,6 @@ export default function Game() {
 
     const checkNextMoves = (nextMove, nextSquares) => {
         if (nextSquares.every((square) => square !== null)) {
-            alert("Game Over"); 
             assessWinner(nextSquares);
         } else if (calcPlayableSquares(nextMove, nextSquares).every((square) => square === false)) {
             const nextPlayer = (calcDarkIsNext(nextMove) ? "Dark" : "Light") + " player";
@@ -41,7 +40,6 @@ export default function Game() {
             cumNoLegalMoves.push(nextMove);
 
             if (cumNoLegalMoves.length > 1) {
-                alert("Game Over");
                 assessWinner(nextSquares);
             } else {
                 setHistory(history => [...history, nextSquares]);
